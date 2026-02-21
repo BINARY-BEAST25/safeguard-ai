@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -9,8 +9,8 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
     try {
       await login(form.email, form.password);
@@ -23,31 +23,50 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a' }}>
-      <div style={{ width: '100%', maxWidth: 420, padding: 40, background: '#1e293b', borderRadius: 16, border: '1px solid #334155' }}>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🛡️</div>
-          <h1 style={{ color: '#6366f1', fontSize: 24, fontWeight: 700 }}>PhishGuard Sentinel</h1>
-          <p style={{ color: '#64748b', marginTop: 8 }}>Sign in to your parent account</p>
+    <div className="auth-shell">
+      <div className="auth-card">
+        <div className="auth-header">
+          <span className="auth-badge">Sentinel Access</span>
+          <h1>PhishGuard Sentinel</h1>
+          <p>Sign in to monitor threats, children activity, and safety alerts in real time.</p>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 6, fontSize: 13, color: '#94a3b8' }}>Email</label>
-            <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="parent@email.com" required />
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              className="form-control"
+              autoComplete="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="parent@domain.com"
+              required
+            />
           </div>
-          <div style={{ marginBottom: 24 }}>
-            <label style={{ display: 'block', marginBottom: 6, fontSize: 13, color: '#94a3b8' }}>Password</label>
-            <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="••••••••" required />
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              className="form-control"
+              autoComplete="current-password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              placeholder="Enter your password"
+              required
+            />
           </div>
-          <button type="submit" disabled={loading} style={{
-            width: '100%', padding: '12px', background: loading ? '#4338ca' : '#6366f1', border: 'none',
-            borderRadius: 8, color: 'white', fontWeight: 600, fontSize: 15,
-          }}>
-            {loading ? 'Signing in...' : 'Sign In'}
+
+          <button type="submit" className="btn btn-primary auth-submit" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
-        <p style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: '#64748b' }}>
-          No account? <Link to="/register" style={{ color: '#6366f1' }}>Create one</Link>
+
+        <p className="auth-footnote">
+          No account yet? <Link to="/register">Create account</Link>
         </p>
       </div>
     </div>
