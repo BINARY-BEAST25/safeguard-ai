@@ -8,6 +8,16 @@ node_modules/
 **/.env
 **/.env.*
 !**/.env.example
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+
+# firebase/admin secret files
+serviceAccountKey*.json
+firebase-service-account*.json
+*firebase-adminsdk*.json
+*.p12
 
 # logs
 npm-debug.log*
