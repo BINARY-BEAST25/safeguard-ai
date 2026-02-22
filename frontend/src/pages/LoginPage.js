@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { authAPI } from '../services/api';
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -19,6 +22,24 @@ const LoginPage = () => {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const email = form.email.trim();
+    if (!email) {
+      toast.error('Enter your email first');
+      return;
+    }
+
+    setForgotLoading(true);
+    try {
+      const res = await authAPI.forgotPassword(email);
+      toast.success(res.data?.message || 'If that email exists, a reset link was sent.');
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Could not send reset email');
+    } finally {
+      setForgotLoading(false);
     }
   };
 
@@ -47,17 +68,37 @@ const LoginPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              className="form-control"
-              autoComplete="current-password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="Enter your password"
-              required
-            />
+            <div className="password-row">
+              <label htmlFor="password">Password</label>
+              <button
+                type="button"
+                className="auth-link-btn"
+                onClick={handleForgotPassword}
+                disabled={forgotLoading}
+              >
+                {forgotLoading ? 'Sending...' : 'Forgot password?'}
+              </button>
+            </div>
+            <div className="password-field">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                className="form-control password-input"
+                autoComplete="current-password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="btn btn-primary auth-submit" disabled={loading}>

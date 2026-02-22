@@ -53,12 +53,12 @@ npm start
 4. Select the `extension/` folder
 
 Direct download link:
-- `https://github.com/Sumit-5002/PhishGuard-Sentinel/archive/refs/heads/main.zip`
+- `https://github.com/Sumit-5002/PhishGuard-Sentinel/raw/main/PhishGuard-Sentinel-Extension.zip` (extension only)
 
 Parent setup flow after login:
 1. Login to dashboard
 2. Create/select child profile and copy Device ID
-3. Download and extract the project ZIP
+3. Download and extract the extension-only ZIP
 4. Load `extension/` in Chrome from `chrome://extensions`
 5. Paste Device ID in extension popup and activate protection
 
